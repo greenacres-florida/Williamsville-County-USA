@@ -3,152 +3,686 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greenacres FL | Project Info</title>
+    <title>Williamsville County | Roblox</title>
+    <!-- Google Fonts & FontAwesome for Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
-            --bg-color: #0a0a0c;
-            --accent: #22c55e;
-            --discord: #5865F2;
-            --glass: rgba(255, 255, 255, 0.05);
-            --text: #e2e8f0;
+            --primary: #0284c7;
+            --primary-light: #38bdf8;
+            --bg-sky: #e0f2fe;
+            --text-dark: #0f172a;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --sidebar-width: 280px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            padding: 40px 0;
+            background: linear-gradient(135deg, #bae6fd 0%, #e0f2fe 50%, #f0fdf4 100%);
+            color: var(--text-dark);
             min-height: 100vh;
-            background-image: radial-gradient(circle at 50% 50%, #1a2e1a 0%, #0a0a0c 100%);
+            overflow-x: hidden;
+            display: flex;
+            position: relative;
         }
 
-        .container {
-            width: 90%;
-            max-width: 700px;
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 2.5rem;
-            text-align: center;
-            animation: fadeIn 1s ease-out;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+        /* --- GLOBAL TRANSPARENT BACKGROUND WATERMARK --- */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('https://cdn.discordapp.com/attachments/1399451418326466733/1540785002307125328/Screenshot_2026-08-22_at_2.07.19_PM.png?ex=6aba049a&is=6ab8b31a&hm=87506df306d610871586144480511e79e548fe1deeb8c16987cc558fd345b61b&') no-repeat center center/cover;
+            opacity: 0.08; /* Almost transparent */
+            z-index: 0;
+            pointer-events: none;
         }
 
-        .gallery {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 2rem;
-        }
-
-        .game-img {
+        /* --- LOADING SCREEN --- */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 200px;
+            height: 100%;
+            background: #0284c7;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+
+        .loader-content {
+            text-align: center;
+            color: var(--white);
+            padding: 0 20px;
+        }
+
+        .loader-content h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .spinner-bar {
+            width: 250px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        .spinner-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--white);
+            border-radius: 3px;
+            animation: loadProgress 2s ease forwards;
+        }
+
+        @keyframes loadProgress {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        /* --- SIDEBAR PANEL --- */
+        aside {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px 20px;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            text-align: center;
+        }
+
+        .sidebar-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
             object-fit: cover;
+            border: 3px solid white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            margin-bottom: 15px;
+        }
+
+        .sidebar-header h3 {
+            color: var(--white);
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: auto 0;
+        }
+
+        .btn {
+            padding: 12px 20px;
             border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            transition: transform 0.4s ease;
-            border: 1px solid rgba(34, 197, 94, 0.3);
-        }
-
-        .game-img:hover { transform: scale(1.05); z-index: 10; }
-
-        h1 {
-            font-size: 2.8rem;
-            margin: 0;
-            background: linear-gradient(to right, #22c55e, #86efac);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .description-box {
-            text-align: left;
-            line-height: 1.6;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-            border-bottom: 2px solid var(--accent);
-        }
-
-        .info-grid { text-align: left; margin-top: 1rem; }
-
-        .feature-tag {
-            background: rgba(255, 255, 255, 0.03);
-            border-left: 4px solid var(--accent);
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 0 12px 12px 0;
-            opacity: 0;
-            animation: slideIn 0.5s forwards;
-        }
-
-        .feature-tag:nth-child(1) { animation-delay: 0.2s; }
-        .feature-tag:nth-child(2) { animation-delay: 0.4s; }
-
-        .discord-btn {
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 12px;
-            background: var(--discord);
-            color: white;
-            text-decoration: none;
-            padding: 15px 35px;
-            border-radius: 12px;
-            font-weight: bold;
-            margin-top: 1rem;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            border: none;
+            color: white;
+            width: 100%;
         }
 
-        .discord-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.5);
+        .btn i {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .btn-play {
+            background: #22c55e;
+        }
+        .btn-play:hover {
+            background: #16a34a;
+            transform: translateX(5px);
         }
 
-        @keyframes slideIn {
-            to { opacity: 1; transform: translateX(0); }
+        .btn-discord {
+            background: #5865F2;
+        }
+        .btn-discord:hover {
+            background: #4752c4;
+            transform: translateX(5px);
+        }
+
+        .btn-youtube {
+            background: #FF0000;
+        }
+        .btn-youtube:hover {
+            background: #cc0000;
+            transform: translateX(5px);
+        }
+
+        .btn-roblox {
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .btn-roblox:hover {
+            background: #0f172a;
+            transform: translateX(5px);
+        }
+
+        .sidebar-footer {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* --- MAIN CONTENT WRAPPER --- */
+        .main-container {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- HERO SECTION --- */
+        header {
+            min-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 40px;
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1477959858617-67f30bc75b82?auto=format&fit=crop&w=1920&q=80') no-repeat center center/cover;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(224, 242, 254, 0.9), rgba(14, 165, 233, 0.75));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 750px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #0369a1;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 15px rgba(255,255,255,0.9);
+        }
+
+        .hero-content p {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: #0f172a;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.75);
+            padding: 20px 25px;
+            border-radius: 16px;
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        /* --- GALLERY SECTION --- */
+        .gallery-section {
+            padding: 80px 40px;
+            max-width: 1300px;
+            margin: 0 auto;
+            width: 100%;
+            text-align: center;
+        }
+
+        .gallery-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #0369a1;
+        }
+
+        .gallery-section > p {
+            color: #475569;
+            margin-bottom: 50px;
+            font-size: 1.05rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .gallery-item {
+            background: var(--glass);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            backdrop-filter: blur(8px);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--glass-border);
+            text-align: left;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item img.contain-img {
+            object-fit: contain;
+            background-color: #f1f5f9;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-info {
+            padding: 22px;
+        }
+
+        .gallery-info h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .gallery-info p {
+            font-size: 0.9rem;
+            color: #64748b;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* --- LIGHTBOX MODAL --- */
+        #lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            padding: 20px;
+        }
+
+        #lightbox.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lightbox-content-box {
+            display: flex;
+            flex-direction: row;
+            background: rgba(255, 255, 255, 0.95);
+            max-width: 950px;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.3);
+            animation: scaleUp 0.3s ease;
+            max-height: 85vh;
+        }
+
+        .lightbox-content-box img {
+            width: 50%;
+            object-fit: contain;
+            background: #0f172a;
+            max-height: 85vh;
+        }
+
+        .lightbox-text {
+            width: 50%;
+            padding: 35px;
+            overflow-y: auto;
+            color: var(--text-dark);
+            text-align: left;
+        }
+
+        .lightbox-text h3 {
+            font-size: 1.5rem;
+            color: #0369a1;
+            margin-bottom: 15px;
+        }
+
+        .lightbox-text p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: #334155;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 25px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 1.3rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s, transform 0.2s;
+            z-index: 10001;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+        }
+
+        @keyframes scaleUp {
+            from { transform: scale(0.9); }
+            to { transform: scale(1); }
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 30px;
+            text-align: center;
+            background: rgba(15, 23, 42, 0.05);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            color: #475569;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+            }
+            aside {
+                width: 100%;
+                height: auto;
+                position: relative;
+                padding: 20px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+            .sidebar-header {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                text-align: left;
+            }
+            .sidebar-logo {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 0;
+                border-radius: 12px;
+            }
+            .sidebar-nav {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin: 10px 0 0 0;
+                width: 100%;
+            }
+            .sidebar-nav .btn {
+                width: calc(50% - 4px);
+                padding: 10px 15px;
+                font-size: 0.85rem;
+                justify-content: center;
+            }
+            .sidebar-footer {
+                display: none;
+            }
+            .main-container {
+                margin-left: 0;
+            }
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+            .lightbox-content-box {
+                flex-direction: column;
+                max-height: 90vh;
+            }
+            .lightbox-content-box img, .lightbox-text {
+                width: 100%;
+            }
+            .lightbox-content-box img {
+                height: 250px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="gallery">
-            <img src="https://cdn.discordapp.com/attachments/1399451418326466733/1454517300630651032/Screenshot_2025-12-27_at_11.49.13_AM.png?ex=696fb2cc&is=696e614c&hm=60af5c4f5b9e13961e3bfdb0b631aef692d563c125c0458eb0cac9ae77d4dac2&" class="game-img">
-            <img src="https://cdn.discordapp.com/attachments/1399451418326466733/1454289263192440903/Screenshot_2025-12-26_at_8.45.56_PM.png?ex=69702feb&is=696ede6b&hm=0f5305757983c9979d9485e72afe4d16dfb7a2d7686cb5ef04aece881a026c33&" class="game-img">
-        </div>
-        
-        <h1>Greenacres, FL</h1>
-        
-        <div class="description-box">
-            Greenacres is a vibrant city located in Palm Beach County, Florida, known for its motto "A Good Place to Live." Our project aims to recreate this atmosphere with high-fidelity environments that capture the unique suburban feel of the local streets. By utilizing the advanced A-Chassis system, every vehicle provides a realistic driving experience that mirrors actual Florida road conditions. We have developed custom user interfaces from scratch to ensure that players have an immersive and intuitive experience while navigating the city. This project is a dedicated tribute to the community, blending real-world geography with top-tier Roblox engineering.
-        </div>
 
-        <div class="info-grid">
-            <div class="feature-tag">
-                <strong>🏎️ A-Chassis Tuning</strong>
-                <p>Precise suspension and engine curves tailored for a realistic cruise.</p>
-            </div>
-            <div class="feature-tag">
-                <strong>🗺️ Palm Beach Style</strong>
-                <p>Authentic road layouts and flora inspired by South Florida's landscape.</p>
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="loader-content">
+            <h2>Loading Williamsville County...</h2>
+            <div class="spinner-bar">
+                <div class="spinner-progress"></div>
             </div>
         </div>
-
-        <a href="https://discord.gg/PUdEe4daB8" target="_blank" class="discord-btn">
-            <i class="fa-brands fa-discord fa-lg"></i>
-            Join the Community
-        </a>
     </div>
+
+    <!-- Side Panel Navigation -->
+    <aside>
+        <div class="sidebar-header">
+            <img src="https://cdn.discordapp.com/attachments/1399452227868954764/1553826565492711545/Edit.jpg?ex=6abaa941&is=6ab957c1&hm=5a442100b04c47a8c8a3e599bcbec1bd19b462623adffefa0b449dc9b1c97f98&" alt="Williamsville County Logo" class="sidebar-logo">
+            <h3>Williamsville County</h3>
+        </div>
+        
+        <div class="sidebar-nav">
+            <a href="#gallery" id="gallery-btn" class="btn btn-play"><i class="fa-solid fa-gamepad"></i> Gallery</a>
+            <a href="https://discord.gg/PUdEe4daB8" target="_blank" rel="noopener noreferrer" class="btn btn-discord"><i class="fa-brands fa-discord"></i> Discord</a>
+            <a href="https://www.youtube.com/@missoneils" target="_blank" rel="noopener noreferrer" class="btn btn-youtube"><i class="fa-brands fa-youtube"></i> YouTube</a>
+            <a href="https://www.roblox.com/users/3218412572/profile" target="_blank" rel="noopener noreferrer" class="btn btn-roblox"><i class="fa-solid fa-user"></i> Roblox</a>
+        </div>
+
+        <div class="sidebar-footer">
+            <p>&copy; 2026 Williamsville County<br>Lakeworth Development</p>
+        </div>
+    </aside>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Hero Showcase Section -->
+        <header>
+            <div class="hero-content">
+                <h1>Williamsville County</h1>
+                <p>Nestled right next to Fairfax County, Williamsville County is a vibrant region packed with historic downtowns, busy highways, and scenic backroads, making it the ultimate setting for community roleplay and driving adventures.</p>
+            </div>
+        </header>
+
+        <!-- Gallery Section -->
+        <section class="gallery-section" id="gallery">
+            <h2>Game Gallery</h2>
+            <p>Explore snapshots from around the county. Click any image to zoom in.</p>
+            
+            <div class="gallery-grid">
+                <!-- Gallery Item 1 -->
+                <div class="gallery-item">
+                    <img src="https://cdn.discordapp.com/attachments/1399451418326466733/1553829425894658239/Correction.png?ex=6abaabeb&is=6ab95a6b&hm=d40ae236570c980bbc839a4a87e941fe250a1ed2fe583cebaea0ba3e799ddc50&" alt="Marsh Overlook Middle School" class="zoomable-img" data-title="Marsh Overlook Middle School" data-desc="Dedicated in memory of the 2007 Marsh Overlook tragedy. Rest in Peace Technician I Kyle Robert Wilson.">
+                    <div class="gallery-info">
+                        <h3>Marsh Overlook Middle School</h3>
+                        <p>Dedicated in memory of the 2007 Marsh Overlook tragedy.</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 2 -->
+                <div class="gallery-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSB4sXCc4brrdH7pUXEklxv5AxIYqKWzUBm3Ns06VHvEgBmKmvHEFLIEcs&s=10" alt="Technician I Kyle Robert Wilson" class="zoomable-img contain-img" data-title="Technician I Kyle Robert Wilson" data-desc="Kyle Robert Wilson became a firefighter to save the lives of others. He died in the line of duty on Monday, April 16, 2007, while performing a primary search at a house fire in Woodbridge, Virginia. He was 24 years old.<br><br>Kyle was born in Olney, Maryland on May 25, 1982 and grew up in Prince William County, Virginia. He graduated from C.D. Hylton High School in 2000 and then went on to graduate from George Mason University in 2005 with a degree in athletic training. Kyle was an avid baseball player and during his high school years was awarded the Most Valuable Defensive Player Award.<br><br>Kyle joined the Prince William County Department of Fire and Rescue on January 23, 2006 and graduated from the County’s Training Academy on June 23, 2006, assigned to Station 12 on Engine 512. Kyle deeply loved his family and fiancée, and everyone who knew him will remember his warm smile, kind heart and sensitive yet fun-loving personality. He will always remain a hero to all he touched, and his sacrifice will never be forgotten.">
+                    <div class="gallery-info">
+                        <h3>Technician I Kyle Robert Wilson</h3>
+                        <p>In memory of a fallen hero who gave his life in the line of duty.</p>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 3 -->
+                <div class="gallery-item">
+                    <img src="https://cdn.discordapp.com/attachments/1399451418326466733/1540784961706004521/Screenshot_2026-08-22_at_2.06.35_PM.png?ex=6aba0491&is=6ab8b311&hm=7a3c0933b9aebecd774c87f9abc611abeadbbc1d7e174a720b2def632c51d72c&" alt="County Overview" class="zoomable-img" data-title="County Landscape" data-desc="Beautiful daytime views across the town infrastructure of Williamsville County.">
+                    <div class="gallery-info">
+                        <h3>County Landscape</h3>
+                        <p>Beautiful daytime views across the town infrastructure.</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 4 -->
+                <div class="gallery-item">
+                    <img src="https://cdn.discordapp.com/attachments/1399451418326466733/1540785044275339376/Screenshot_2026-08-22_at_2.08.58_PM.png?ex=6aba04a4&is=6ab8b324&hm=08494da4988ed208d393b3e22e8c9562e95c5f498870a63c925b55fdb54066c8&" alt="County View 2" class="zoomable-img" data-title="County View 2" data-desc="Another scenic look at the streets and surroundings of Williamsville County.">
+                    <div class="gallery-info">
+                        <h3>County View 2</h3>
+                        <p>Another scenic look at the streets and surroundings.</p>
+                    </div>
+                </div>
+
+                <!-- Gallery Item 5 -->
+                <div class="gallery-item">
+                    <img src="https://cdn.discordapp.com/attachments/1399451418326466733/1540785002307125328/Screenshot_2026-08-22_at_2.07.19_PM.png?ex=6aba049a&is=6ab8b31a&hm=87506df306d610871586144480511e79e548fe1deeb8c16987cc558fd345b61b&" alt="County View 3" class="zoomable-img" data-title="County View 3" data-desc="Detailed area showcase within Williamsville County roleplay map.">
+                    <div class="gallery-info">
+                        <h3>County View 3</h3>
+                        <p>Detailed area showcase within the map.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 Williamsville County Roblox. Not officially affiliated with Roblox Corporation. Developed by Hendrix @prodridter_839. 2026 Lakeworth Development</p>
+        </footer>
+    </div>
+
+    <!-- Lightbox Modal Container -->
+    <div id="lightbox">
+        <button class="lightbox-close" id="lightbox-close-btn"><i class="fa-solid fa-xmark"></i></button>
+        <div class="lightbox-content-box">
+            <img id="lightbox-img" src="" alt="Zoomed view">
+            <div class="lightbox-text">
+                <h3 id="lightbox-title"></h3>
+                <p id="lightbox-desc"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Handlers -->
+    <script>
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                loader.style.visibility = 'hidden';
+            }, 2000); 
+        });
+
+        // Smooth scroll for gallery button
+        document.getElementById('gallery-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Lightbox Image Zoom functionality with detailed text
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxDesc = document.getElementById('lightbox-desc');
+        const lightboxCloseBtn = document.getElementById('lightbox-close-btn');
+        const zoomableImages = document.querySelectorAll('.zoomable-img');
+
+        zoomableImages.forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightboxTitle.textContent = img.getAttribute('data-title');
+                lightboxDesc.innerHTML = img.getAttribute('data-desc');
+                lightbox.classList.add('active');
+            });
+        });
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+        }
+
+        lightboxCloseBtn.addEventListener('click', closeLightbox);
+        
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+            }
+        });
+    </script>
 </body>
 </html>
